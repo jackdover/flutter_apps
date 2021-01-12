@@ -1,0 +1,45 @@
+dependencies:
+  # Your other regular dependencies here
+  json_annotation: ^2.0.0
+
+dev_dependencies:
+  # Your other dev_dependencies here
+  build_runner: ^1.0.0
+  json_serializable: ^2.0.0
+
+
+
+
+
+https://pub.dev/packages/json_annotation/install
+json_annotation: ^3.1.1
+import 'package:json_annotation/json_annotation.dart';
+
+https://pub.dev/packages/json_serializable/install
+json_serializable: ^3.5.0
+import 'package:json_serializable/json_serializable.dart';
+
+https://pub.dev/packages/build_runner/install
+build_runner: ^1.10.6
+import 'package:build_runner/build_runner.dart';
+
+
+/////// 步骤
+1. 可以在Android工程中创建实体bean, 使用gsonformat将json串生成实体bean
+2. 复制java的实体bean到dart的实体bean
+3. 处理格式: class要单独提取, private 属性不需要, get/set方法不需要, public static 不需要
+4. boolean 类型替换成 bool, 给所有class逐个生成全参构造
+5. 在dart文件中执行以下
+5.1 import 'package:json_annotation/json_annotation.dart';
+5.2 part '同文件名.g.dart';
+5.3 所有class上一行,添加 @JsonSerializable()注解
+5.4 定义转换方法
+  //不同的类使用不同的mixin即可
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+6. 在项目根目录执行命令
+两种方式:
+6.1 一次性生成(每次更改都需要执行)      flutter packages pub run build_runner build
+6.2 持续生成(watcher:如有更改自动构建)  flutter packages pub run build_runner watch
+
+

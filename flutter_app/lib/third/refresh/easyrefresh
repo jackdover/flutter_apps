@@ -1,0 +1,93 @@
+https://pub.dev/packages/flutter_easyrefresh/install
+
+flutter_easyrefresh: ^2.1.6
+
+import 'package:flutter_easyrefresh/bezier_circle_header.dart';
+import 'package:flutter_easyrefresh/bezier_hour_glass_header.dart';
+import 'package:flutter_easyrefresh/phoenix_footer.dart';
+import 'package:flutter_easyrefresh/taurus_header.dart';
+import 'package:flutter_easyrefresh/phoenix_header.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/taurus_footer.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_easyrefresh/delivery_header.dart';
+import 'package:flutter_easyrefresh/material_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
+import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+
+2.Add EasyreFresh
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+....
+  // Way one
+  EasyRefresh(
+    child: ScrollView(),
+    onRefresh: () async{
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+  )
+  // Way two
+  EasyRefresh.custom(
+    slivers: <Widget>[],
+    onRefresh: () async{
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+  )
+  // Way three
+  EasyRefresh.builder(
+    builder: (context, physics, header, footer) {
+      return CustomScrollView(
+        physics: physics,
+        slivers: <Widget>[
+          ...
+          header,
+          ...
+          footer,
+        ],
+      );
+    }
+    onRefresh: () async{
+      ....
+    },
+    onLoad: () async {
+      ....
+    },
+  )
+3.Trigger refresh and load action
+  EasyRefreshController _controller = EasyRefreshController();
+  ....
+  EasyRefresh(
+    controller: _controller,
+    ....
+  );
+  ....
+  _controller.callRefresh();
+  _controller.callLoad();
+4.Control loading and refreshing completed
+  EasyRefreshController _controller = EasyRefreshController();
+  ....
+  EasyRefresh(
+	enableControlFinishRefresh: true,
+	enableControlFinishLoad: true,
+    ....
+  );
+  ....
+  _controller.finishRefresh(success: true);
+  _controller.finishLoad(success： true, noMore: false);
+Use the specified Header and Footer
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_easyrefresh/material_footer.dart';
+....
+  new EasyRefresh(
+    header: MaterialHeader(),
+    footer: MaterialFooter(),
+    child: ScrollView(),
+    ....
+  )

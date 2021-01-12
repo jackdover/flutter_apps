@@ -1,0 +1,145 @@
+101 Flutter 渲染流程:
+                    Widget-Element-RenderObject
+                    key:
+                    LocalKey(ValueKey-ObjectKey-UniqueKey)
+                    GlobalKey
+102 Flutter 状态管理:
+                    短时状态 Ephemeral state
+                    应用状态 App state
+                    共享状态
+                    InheritedWidget (of方法,updateShouldNotify方法)
+                    Provider (ChangeNotifier-ChangeNotifierProvider-Consumer-Selector)
+                    MultiProvider
+
+                        dependencies:
+                            provider: ^4.0.4
+103 Flutter 事件监听:
+                    原始指针事件（Pointer Events） - Listener
+                            PointerDownEvent 指针在特定位置与屏幕接触
+                            PointerMoveEvent 指针从屏幕的一个位置移动到另外一个位置
+                            PointerUpEvent 指针与屏幕停止接触
+                            PointerCancelEvent 指针因为一些特殊情况被取消
+                    手势识别（Gesture Detector）
+                        globalPosition用于获取相对于屏幕的位置信息
+                        localPosition用于获取相对于当前Widget的位置信息
+                            点击：
+                                onTapDown：用户发生手指按下的操作
+                                onTapUp：用户发生手指抬起的操作
+                                onTap：用户点击事件完成
+                                onTapCancel：事件按下过程中被取消
+                            双击：
+                                onDoubleTap：快速点击了两次
+                            长按：
+                                onLongPress：在屏幕上保持了一段时间
+                            纵向拖拽：
+                                onVerticalDragStart：指针和屏幕产生接触并可能开始纵向移动；
+                                onVerticalDragUpdate：指针和屏幕产生接触，在纵向上发生移动并保持移动；
+                                onVerticalDragEnd：指针和屏幕产生接触结束；
+                            横线拖拽：
+                                onHorizontalDragStart：指针和屏幕产生接触并可能开始横向移动；
+                                onHorizontalDragUpdate：指针和屏幕产生接触，在横向上发生移动并保持移动；
+                                onHorizontalDragEnd：指针和屏幕产生接触结束；
+                            移动：
+                                onPanStart：指针和屏幕产生接触并可能开始横向移动或者纵向移动。如果设置了 onHorizontalDragStart 或者 onVerticalDragStart，该回调方法会引发崩溃；
+                                onPanUpdate：指针和屏幕产生接触，在横向或者纵向上发生移动并保持移动。如果设置了 onHorizontalDragUpdate 或者 onVerticalDragUpdate，该回调方法会引发崩溃。
+                                onPanEnd：指针先前和屏幕产生了接触，并且以特定速度移动，此后不再在屏幕接触上发生移动。如果设置了 onHorizontalDragEnd 或者 onVerticalDragEnd，该回调方法会引发崩溃。
+                    跨组件事件 EventBus
+                        dependencies:
+                          event_bus: ^1.1.1
+104 Flutter 路由导航:
+                    Route
+                        MaterialPageRoute
+                    Navigator
+                        Navigator.of(context)
+                        Future<T> push<T extends Object>(Route<T> route)
+                        Future<T> pushNamed<T extends Object>(String routeName, {Object arguments,})
+                        bool pop<T extends Object>([ T result ])
+                    返回按钮，如何监听
+                        方法一：自定义返回的按钮（在详情页中修改Scaffold的appBar）
+                        方法二：监听返回按钮的点击（给Scaffold包裹一个WillPopScope）
+                    命名路由: MaterialApp的  initialRoute(设置应用程序从哪一个路由开始启动，设置了该属性，就不需要再设置home属性了) 和
+                                            routes(Map<String, WidgetBuilder>) 中
+                    参数传递: arguments ( ModalRoute.of(context).settings.arguments;)
+                    路由钩子: onGenerateRoute(判断登录), onUnknownRoute
+105 Flutter 实现动画:
+                    Animation: addListener, addStatusListener
+                    AnimationController: 必传的参数vsync (开发中比较常见的是将SingleTickerProviderStateMixin混入到State的定义中。)
+                    CurvedAnimation: Curve
+                    Tween: Tween.animate   (也有一些子类，比如ColorTween、BorderTween，可以针对动画或者边框来设置动画的值。)
+                    AnimatedWidget:
+                    AnimatedBuilder:
+                    交织动画: 多种动画集合
+                    Hero动画: 享元动画（Shared Element Transition 这种跨页面共享的动画） (如查看大图)
+106 Flutter 主题风格:
+                    全局Theme : 会影响整个app的颜色和字体样式。只需要向MaterialApp构造器传入 ThemeData 即可
+                    局部Theme : 不希望直接使用全局的Theme，而希望自己来定义，只需要在Widget的父节点包裹一下Theme即可
+                    复用全局,部分定制 : 很多时候并不是想完全使用一个新的主题，而且在之前的主题基础之上进行修改：
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            primaryColor: Colors.greenAccent
+                          )
+                         );
+                    注意事项 : accentColor在这里并不会被覆盖。
+                    暗黑Theme适配 : MaterialApp中有theme和dartTheme两个参数
+                    开发中适配两种主题 :
+107 Flutter 屏幕适配:
+                    Flutter单位: 类似于iOS中的点pt，也就是point, 比如说iPhone6的尺寸是375x667，但是它的分辨率其实是750x1334
+                    屏幕信息: 可以通过MediaQuery
+                    适配方案:
+                        rpx适配 :
+                        最佳实践 extension :  Dart从2.7.0开始，可以通过extension来给现有的类进行扩展
+                    获取一些设备相关的信息，可以使用官方提供的一个库：
+                    dependencies:
+                      device_info: ^0.4.2+1
+108 Flutter 国际化:
+            Widget国际化
+                flutter_localizations : 如果想要添加其他语言，你的应用必须指定额外的 MaterialApp 属性并且添加一个单独的 package，叫做 flutter_localizations
+                    1. 在 pubspec.yaml 文件中添加它作为依赖
+                        dependencies:
+                          flutter:
+                            sdk: flutter
+                          flutter_localizations:
+                            sdk: flutter
+                    2. 设置MaterialApp ( localizationsDelegates supportedLocales )
+                    注意：如果要指定语言代码、文字代码和国家代码，可以进行如下指定方式：
+
+                    MaterialApp(
+                      localizationsDelegates: [
+                        GlobalMaterialLocalizations.delegate, // 指定本地化的字符串和一些其他的值
+                        GlobalCupertinoLocalizations.delegate, // 对应的Cupertino风格
+                        GlobalWidgetsLocalizations.delegate // 指定默认的文本排列方向, 由左到右或由右到左
+                      ],
+                      //  supportedLocales: [
+                      //    Locale("en"),
+                      //    Locale("zh")
+                      //  ],
+                      // Full Chinese support for CN, TW, and HK
+                      supportedLocales: [
+                        const Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
+                        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'), // generic simplified Chinese 'zh_Hans'
+                        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), // generic traditional Chinese 'zh_Hant'
+                        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'), // 'zh_Hans_CN'
+                        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'), // 'zh_Hant_TW'
+                        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
+                      ],
+
+                    )
+            文本国际化
+                1. 创建本地化类: 定义我们需要进行本地化的字符串等信息
+                    1.我们需要一个构造器，并且传入一个Locale对象（后续会使用到）
+                    2.定义一个Map，其中存放我们不同语言对应的显示文本
+                    3.定义它们对应的getter方法，根据语言环境返回不同的结果
+                2. 自定义Delegate
+                3. 使用本地化类
+                4. 异步加载数据
+            国际化的工具
+                arb文件
+                intl package
+                Android Studio的插件：Flutter Intl
+
+109 点滴
+debugShowCheckedModeBanner: false, // 是否显示 右上角debugger标签
+在pub.dartlang.org上找到english_words软件包: 其中包含数千个最常用的英文单词以及一些实用功能.
+Json转Dart Model类: 官方推荐的json_serializable package包
+
+
